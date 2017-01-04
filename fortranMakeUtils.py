@@ -6,7 +6,7 @@
 # Author: Denis Eiras - denis.eiras@gmail.com
 # Github: https://github.com/deniseiras/fortranMakeUtils
 #
-# Objective: Fortran Utility written in python for generating dependency tree and generating makefiles
+# Objective: Fortran Utility written in python for generating dependency tree and generating makefiles.
 #
 # Usage:
 #
