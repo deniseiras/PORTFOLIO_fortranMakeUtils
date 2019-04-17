@@ -162,9 +162,9 @@ def isFortranIntrinsicFucntions(candidate):
 
 
 def isOthreFortranKeywords(candidate):
-    return candidate.lower() in ['integer', 'character', 'logical', 'real', 'struct', 'unit', 'false', 'true',
-                                 'not', 'and', 'or', 'eq', 'ne', 'lt', 'ge', 'le', 'eqv', 'neqv', 'enddo', 'endif',
-                                 'none', 'kind', 'include']
+    return candidate.lower() in ['in', 'inout', 'file', 'form', 'iostat', 'status', 'action', 'integer', 'character',
+                                 'logical', 'real', 'struct', 'unit', 'false', 'true', 'not', 'and', 'or', 'eq', 'ne',
+                                 'lt', 'ge', 'le', 'eqv', 'neqv', 'enddo', 'endif', 'none', 'kind', 'include']
 
 
 def isFortran77Keyword(candidate):

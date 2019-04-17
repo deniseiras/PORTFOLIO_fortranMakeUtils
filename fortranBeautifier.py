@@ -34,7 +34,7 @@
 import re
 import shutil
 
-from fortranUtils import getFiles, getMethodsParameter, isFortran95Keyword
+from fortranUtils import getFiles, getMethodsParameter, isFortran95Keyword, isComment
 
 # start program ==================
 methodsParameter = getMethodsParameter()
@@ -48,22 +48,30 @@ print("Searching for fortran keywords ...")
 for filename in filesInitialDir:
     oldFileName = filename + '.bak'
     shutil.copy(filename, oldFileName)
-    stringContinues = False
-    strings = []
     with open(oldFileName) as oldFile:
         with open(filename, 'w') as newFile:
+            stringContinues = False
+            strings = []
             for line in oldFile:
                 newLine = line
-                stringsLine = re.split("\n| |,|\.|\(|\)|\:|\*", line)
+                stringsLine = re.split("[\n ,.():*]", line)
                 stringsLine = filter(None, stringsLine)
                 if len(stringsLine) > 0:
                     if stringContinues:
-                        strings.extend(stringsLine)
+                        strings += stringsLine
                     else:
                         strings = stringsLine
 
-                    for str in strings:
-                        if isFortran95Keyword(str):
-                            print('replacing ', str, ' in ', newLine)
-                            newLine = newLine.replace(str, str.lower())
+                    if stringsLine[len(stringsLine) - 1] == "\&":
+                        del strings[-1]
+                        stringContinues = True
+                        continue
+                    else:
+                        stringContinues = False
+                    if not isComment(strings[0]):
+                        for str in strings:
+                            if isFortran95Keyword(str):
+                                print('replacing ', str, ' in ', newLine)
+                                strRegex = r"\b" + str + r"\b"
+                                newLine = re.sub(strRegex, str.lower(), newLine)
                 newFile.write(newLine)
