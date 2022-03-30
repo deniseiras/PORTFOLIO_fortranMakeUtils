@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 # -*- coding: utf8 -*-
 
 ##########################################
@@ -15,7 +15,7 @@
 # 1 - Max depth for search callers and callees (mandatory)
 # 2 - Filename of the interested routine - if you want to restrict the search to this file and subroutine.
 # 3 - Interested routine to be searched - if you want to restrict the search to this file and subroutine.
-
+#
 # Generates files:
 #  - allMethodsCalled.txt: Displays all methods called for all source files.
 #  - allMethodsNotCalled.txt: Displays all methods not called for all source files.
@@ -28,15 +28,23 @@
 #       This file is also usefull for use in removeUnusedFiles.py script.
 #  - depend.mk: File to include in Makefile: Shows the dependency between object files.
 #
+#
+# BUG:
+# * stackoverflow when a program.f90 call a methods - must fix when using programs
+# * allMethodsNotCalled.txt does not regards the father calller. calleTree.txt and callerTree.txt regards.
+#
 ##########################################
 
 import re
 import sys
-import os
 from fortranUtils import *
 
 
 # start program ==================
+
+# print('Using python {}.{}'.format(sys.version_info[0], sys.version_info[1]))
+# if sys.version_info[0] > 2:
+#     raise Exception("Must be using Python 2.7")
 
 methodsParameter = getMethodsParameter()
 if len(methodsParameter) != 2 and len(methodsParameter) != 4:
@@ -78,6 +86,11 @@ for filename in filesInitialDir:
                     mod = Module(filename, None)
                     met = Method(method, mod, strings[0].lower())
                     allMethods.add(met)
+                if len(strings) > 1 and isRecursive(strings[0]) and isRoutine(strings[1]):
+                    method = strings[2].split("(")[0].lower()
+                    mod = Module(filename, None)
+                    met = Method(method, mod, strings[1].lower())
+                    allMethods.add(met)
                 # logical function ... etc
                 elif len(strings) > 2 and not isEndString(strings[0]) and isFunction(strings[1]):
                     method = strings[2].split("(")[0].lower()
@@ -104,10 +117,16 @@ for filename in filesInitialDir:
         for line in file:
             strings = line.split()
             if len(strings) > 0:
-                if len(strings) > 1 and (isRoutine(strings[0]) or isFunction(strings[1])):
+                if len(strings) > 1 and isRoutine(strings[0]):
                     method = strings[1].split("(")[0].lower()
                     mod = Module(filename, None)
                     insideMethod = Method(method, mod, strings[0].lower())
+                    continue
+                # real function , recursive subroutine ...
+                if len(strings) > 1 and not isEndString(strings[0]) and isRoutine(strings[1]):
+                    method = strings[2].split("(")[0].lower()
+                    mod = Module(filename, None)
+                    insideMethod = Method(method, mod, strings[2].lower())
                     continue
                 elif len(strings) == 2 and isModule(strings[0]):
                     insideModule = Module(filename, strings[1])

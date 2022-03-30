@@ -131,6 +131,8 @@ def isInterfaceRoutine(candidate):
 def isModule(candidate):
     return candidate.lower() == "module"
 
+def isRecursive(candidate):
+    return candidate.lower() == "recursive"
 
 def isUsedModule(candidade):
     return candidade.lower() == "use"
