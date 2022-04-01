@@ -1,3 +1,4 @@
+from codecs import ignore_errors
 import os
 import sys
 
@@ -80,19 +81,6 @@ class CalleMethod:
 
     def __hash__(self):
         return hash(self.__repr__())
-
-
-def getMethodsParameter():
-    global methodsParameter
-    if methodsParameter is None:
-        methodsParameter = sys.argv
-        del methodsParameter[0]
-    return methodsParameter
-
-
-def getMaxLevel():
-    methodsParameter = getMethodsParameter()
-    return int(methodsParameter[1])
 
 
 def getFiles(initialDir):
@@ -252,8 +240,8 @@ def createModulesAndDependentsOfDependents(module, modulesUsedOrCalled, modulesD
         modulesUsedOrCalled.add(module)
 
 
-def writeObjectDependeciesFile(modules):
-    fileDepsName = "depend.mk"
+def writeObjectDependeciesFile(modules, out_dir):
+    fileDepsName = "{}/depend.mk".format(out_dir)
     print("Creating dependecies file: {0} ...".format(fileDepsName))
     fileDeps = open(fileDepsName, 'w')
     for eachModule in modules:
@@ -264,8 +252,8 @@ def writeObjectDependeciesFile(modules):
             fileDeps.write("\n")
 
 
-def writeObjectsFile(modules):
-    fileObjsName = "objects.mk"
+def writeObjectsFile(modules, out_dir):
+    fileObjsName = "{}/objects.mk".format(out_dir)
     print("Creating objects file: {0} ...".format(fileObjsName))
     fileObjs = open(fileObjsName, 'w')
     fileObjs.write("SRCS =")
@@ -276,24 +264,24 @@ def writeObjectsFile(modules):
         fileObjs.write(" " + eachModule.getObjectName())
 
 
-def createCalleeTree(allCallees):
+def createCalleeTree(allCallees, max_level):
     print("creating callee tree ...")
     calleeLevel = 0
     for callee in allCallees:
         if len(callee.callers) > 0:
-            createCalleeTreeIntenal(callee, allCallees, calleeLevel)
+            createCalleeTreeIntenal(callee, allCallees, calleeLevel, max_level)
 
 
-def createCallerTree(allCallers):
+def createCallerTree(allCallers, max_level):
     print("creating caller tree ...")
     callerLevel = 0
     for caller in allCallers:
         if len(caller.callees) > 0:
-            createCallerTreeIntenal(caller, allCallers, callerLevel)
+            createCallerTreeIntenal(caller, allCallers, callerLevel, max_level)
 
 
-def createCalleeTreeIntenal(calle, allCalles, calleeLevel):
-    if calleeLevel > getMaxLevel():
+def createCalleeTreeIntenal(calle, allCalles, calleeLevel, max_level):
+    if calleeLevel > max_level:
         return
     calleeLevel += 1
     for eachCaller in calle.callers:
@@ -301,11 +289,11 @@ def createCalleeTreeIntenal(calle, allCalles, calleeLevel):
             if eachCallee.method == eachCaller.method:
                 eachCaller.callers = eachCallee.callers
                 break
-        createCalleeTreeIntenal(eachCaller, allCalles, calleeLevel)
+        createCalleeTreeIntenal(eachCaller, allCalles, calleeLevel, max_level)
 
 
-def createCallerTreeIntenal(caller, allCallers, callerLevel):
-    if callerLevel > getMaxLevel():
+def createCallerTreeIntenal(caller, allCallers, callerLevel, max_level):
+    if callerLevel > max_level:
         return
     callerLevel += 1
     for eachCallee in caller.callees:
@@ -313,81 +301,77 @@ def createCallerTreeIntenal(caller, allCallers, callerLevel):
             if eachCaller.method == eachCallee.method:
                 eachCallee.callees = eachCaller.callees
                 break
-        createCallerTreeIntenal(eachCallee, allCallers, callerLevel)
+        createCallerTreeIntenal(eachCallee, allCallers, callerLevel, max_level)
 
 
-def writeCallees(allCallees):
-    fileCalleeName = "calleeTree.txt"
+def writeCallees(allCallees, out_dir, max_level):
+    fileCalleeName = "{}/calleeTree.txt".format(out_dir)
     print("Creating callee tree file {0} ...".format(fileCalleeName))
     fileCallee = open(fileCalleeName, 'w')
     level = 0
     for callee in allCallees:
-        writeCalleesInternal(fileCallee, callee, level)
+        writeCalleesInternal(fileCallee, callee, level, max_level)
 
 
-def writeCallers(allCallers, methodsInCallerTree):
-    fileCallerName = "callerTree.txt"
+def writeCallers(allCallers, methodsInCallerTree, out_dir, max_level):
+    fileCallerName = "{}/callerTree.txt".format(out_dir)
     print("Creating caller tree file " + fileCallerName + " ...")
     fileCaller = open(fileCallerName, 'w')
     level = 0
     for caller in allCallers:
-        writeCallersInternal(fileCaller, caller, level, methodsInCallerTree)
+        writeCallersInternal(fileCaller, caller, level, methodsInCallerTree, max_level)
 
 
-def writeCalleesInternal(fileCallee, callee, level):
-    if level > getMaxLevel():
+def writeCalleesInternal(fileCallee, callee, level, max_level):
+    if level > max_level:
         return
     fileCallee.write(("\t" * level) + callee.method.__str__() + "\n")
     if len(callee.callers) > 0:
         level += 1
         for eachCaller in callee.callers:
-            writeCalleesInternal(fileCallee, eachCaller, level)
+            writeCalleesInternal(fileCallee, eachCaller, level, max_level)
         level -= 1
 
 
-def writeCallersInternal(fileCaller, caller, level, methodsInCallerTree):
-    if level > getMaxLevel():
+def writeCallersInternal(fileCaller, caller, level, methodsInCallerTree, max_level):
+    if level > max_level:
         return
     fileCaller.write(("\t" * level) + caller.method.__str__() + "\n")
     methodsInCallerTree.add(caller.method)
     if len(caller.callees) > 0:
         level += 1
         for eachCallee in caller.callees:
-            writeCallersInternal(fileCaller, eachCallee, level, methodsInCallerTree)
+            writeCallersInternal(fileCaller, eachCallee, level, methodsInCallerTree, max_level)
         level -= 1
 
 
-def writeCalledFile(methodsCalled):
-    fName = "allMethodsCalled.txt"
+def writeCalledFile(methodsCalled, out_dir):
+    fName = "{}/allMethodsCalled.txt".format(out_dir)
     print("Creating methods called of all files: file " + fName)
     fileCalled = open(fName, 'w')
     for key in sorted(methodsCalled.keys(), key=lambda m: m.__str__()):
         fileCalled.write(key.__str__() + " = " + str(methodsCalled[key]) + "\n")
 
 
-def writeNotCalledFile(methodsNotCalled):
-    fName = "allMethodsNotCalled.txt"
+def writeNotCalledFile(methodsNotCalled, out_dir):
+    fName = "{}/allMethodsNotCalled.txt".format(out_dir)
     print("Creating methods not called of all files: file " + fName)
     fileNotCalled = open(fName, 'w')
     for key in sorted(methodsNotCalled, key=lambda m: m.__str__()):    
         fileNotCalled.write(key.__str__() + "\n")
 
 
-def writeMethodsInCallerTreeFile(methodsInCallerTree):
-    fName = "methodsInCallerTree.txt"
+def writeMethodsInCallerTreeFile(methodsInCallerTree, out_dir):
+    fName = "{}/methodsInCallerTree.txt".format(out_dir)
     print("Creating methods in Caller Tree: file " + fName)
     fileInCallerTree = open(fName, 'w')
     for method in sorted(methodsInCallerTree, key=lambda m: m.__str__()):
         fileInCallerTree.write(method.__str__() + "\n")
 
 
-def writeMethodsNotInCallerTreeFile(methodsNotInCallerTree):
-    fName = "methodsNotinCallerTree.txt"
+def writeMethodsNotInCallerTreeFile(methodsNotInCallerTree, out_dir):
+    fName = "{}/methodsNotinCallerTree.txt".format(out_dir)
     print("Creating methods not in Caller Tree: file " + fName)
     fileNotInCallerTree = open(fName, 'w')
     for method in sorted(methodsNotInCallerTree, key=lambda m: m.__str__()):
         fileNotInCallerTree.write(method.__str__() + "\n")
-
-
-methodsParameter = None
-methodsParameter = getMethodsParameter()
