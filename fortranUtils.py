@@ -240,10 +240,10 @@ def createModulesAndDependentsOfCaller(modules, caller):
     modules.add(moduleCandidate)
 
 
-def createModulesAndDependentsOfDependents(module, modulesUsedOrCalled):
+def createModulesAndDependentsOfDependents(module, modulesUsedOrCalled, modulesDependents):
     # if module not in modulesUsedOrCalled:
     for eachDep in module.dependsOn:
-        createModulesAndDependentsOfDependents(eachDep, modulesUsedOrCalled)
+        createModulesAndDependentsOfDependents(eachDep, modulesUsedOrCalled, modulesDependents)
 
     modDependent = [modDep for modDep in modulesDependents if modDep == module]
     if len(modDependent) > 0:
@@ -325,13 +325,13 @@ def writeCallees(allCallees):
         writeCalleesInternal(fileCallee, callee, level)
 
 
-def writeCallers(allCallers):
+def writeCallers(allCallers, methodsInCallerTree):
     fileCallerName = "callerTree.txt"
     print("Creating caller tree file " + fileCallerName + " ...")
     fileCaller = open(fileCallerName, 'w')
     level = 0
     for caller in allCallers:
-        writeCallersInternal(fileCaller, caller, level)
+        writeCallersInternal(fileCaller, caller, level, methodsInCallerTree)
 
 
 def writeCalleesInternal(fileCallee, callee, level):
@@ -345,7 +345,7 @@ def writeCalleesInternal(fileCallee, callee, level):
         level -= 1
 
 
-def writeCallersInternal(fileCaller, caller, level):
+def writeCallersInternal(fileCaller, caller, level, methodsInCallerTree):
     if level > getMaxLevel():
         return
     fileCaller.write(("\t" * level) + caller.method.__str__() + "\n")
@@ -353,53 +353,41 @@ def writeCallersInternal(fileCaller, caller, level):
     if len(caller.callees) > 0:
         level += 1
         for eachCallee in caller.callees:
-            writeCallersInternal(fileCaller, eachCallee, level)
+            writeCallersInternal(fileCaller, eachCallee, level, methodsInCallerTree)
         level -= 1
 
 
-def writeCalledFile():
+def writeCalledFile(methodsCalled):
     fName = "allMethodsCalled.txt"
     print("Creating methods called of all files: file " + fName)
     fileCalled = open(fName, 'w')
-    for each in sorted(methodsCalled):
-        fileCalled.write(each.__str__() + "\n")
+    for key in sorted(methodsCalled.keys(), key=lambda m: m.__str__()):
+        fileCalled.write(key.__str__() + " = " + str(methodsCalled[key]) + "\n")
 
 
-def writeNotCalledFile():
+def writeNotCalledFile(methodsNotCalled):
     fName = "allMethodsNotCalled.txt"
     print("Creating methods not called of all files: file " + fName)
     fileNotCalled = open(fName, 'w')
-    for each in sorted(methodsNotCalled):
-        fileNotCalled.write(each.__str__() + "\n")
+    for key in sorted(methodsNotCalled, key=lambda m: m.__str__()):    
+        fileNotCalled.write(key.__str__() + "\n")
 
 
-def writeMethodsInCallerTreeFile():
+def writeMethodsInCallerTreeFile(methodsInCallerTree):
     fName = "methodsInCallerTree.txt"
     print("Creating methods in Caller Tree: file " + fName)
     fileInCallerTree = open(fName, 'w')
-    for method in sorted(methodsInCallerTree):
+    for method in sorted(methodsInCallerTree, key=lambda m: m.__str__()):
         fileInCallerTree.write(method.__str__() + "\n")
 
 
-def writeMethodsNotInCallerTreeFile():
+def writeMethodsNotInCallerTreeFile(methodsNotInCallerTree):
     fName = "methodsNotinCallerTree.txt"
     print("Creating methods not in Caller Tree: file " + fName)
     fileNotInCallerTree = open(fName, 'w')
-    for method in sorted(methodsNotInCallerTree):
+    for method in sorted(methodsNotInCallerTree, key=lambda m: m.__str__()):
         fileNotInCallerTree.write(method.__str__() + "\n")
 
 
 methodsParameter = None
 methodsParameter = getMethodsParameter()
-methods = set()
-allMethods = set()
-methodsCalled = set()
-methodsNotCalled = set()
-interfaceMethods = set()
-callees = set()
-callers = set()
-methodsInCallerTree = set()
-methodsNotInCallerTree = set()
-modules = set()
-modulesDependents = set()
-modulesCalled = set()

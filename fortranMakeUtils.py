@@ -42,9 +42,22 @@ from fortranUtils import *
 
 # start program ==================
 
-# print('Using python {}.{}'.format(sys.version_info[0], sys.version_info[1]))
-# if sys.version_info[0] > 2:
-#     raise Exception("Must be using Python 2.7")
+print('Using python {}.{}'.format(sys.version_info[0], sys.version_info[1]))
+if sys.version_info[0] < 3:
+    raise Exception("Must be using Python 3")
+
+methods = set()
+allMethods = set()
+methodsCalled = {}
+methodsNotCalled = set()
+interfaceMethods = set()
+callees = set()
+callers = set()
+methodsInCallerTree = set()
+methodsNotInCallerTree = set()
+modules = set()
+modulesDependents = set()
+modulesCalled = set()
 
 methodsParameter = getMethodsParameter()
 if len(methodsParameter) != 2 and len(methodsParameter) != 4:
@@ -66,7 +79,7 @@ for filename in filesInitialDir:
     with open(filename) as file:
         for line in file:
             stringsLine = re.split("\n| |,", line)
-            stringsLine = filter(None, stringsLine)
+            stringsLine = list(filter(None, stringsLine))
             if len(stringsLine) > 0:
                 if stringContinues:
                     strings += stringsLine
@@ -185,10 +198,14 @@ for filename in filesInitialDir:
                             # for eachMet in methods:
                             #     if eachMet.module in insideModule.dependsOn:
                             #         calledMethod = eachMet.module
-                            methodsCalled.add(eachMethod)
+                            if eachMethod in methodsCalled.keys():
+                                methodsCalled[eachMethod] += 1
+                            else:
+                                methodsCalled[eachMethod] = 1
+
                             addCalleAndCaller(eachMethod, insideMethod, callees, callers)
 
-methodsNotCalled = methods - methodsCalled
+methodsNotCalled = methods - set(list(methodsCalled.keys()))
 
 createCalleeTree(callees)
 createCallerTree(callers)
@@ -209,15 +226,15 @@ else:
     for caller in callers:
         createModulesAndDependentsOfCaller(modulesCalled, caller)
 
-writeCalledFile()
-writeNotCalledFile()
+writeCalledFile(methodsCalled)
+writeNotCalledFile(methodsNotCalled)
 writeCallees(callees)
-writeCallers(callers)
-writeMethodsInCallerTreeFile()
+writeCallers(callers, methodsInCallerTree)
+writeMethodsInCallerTreeFile(methodsInCallerTree)
 
 
 methodsNotInCallerTree = methods - methodsInCallerTree
-writeMethodsNotInCallerTreeFile()
+writeMethodsNotInCallerTreeFile(methodsNotInCallerTree)
 
 # add "use" dependents modules of "called" dependents modules
 modulesUsedOrCalled = set()
@@ -226,7 +243,7 @@ for modCalled in modulesCalled:
     if len(modDependent) > 0:
         modDependent = modDependent[0]
         modCalled.dependsOn = modCalled.dependsOn.union(modDependent.dependsOn)
-        createModulesAndDependentsOfDependents(modCalled, modulesUsedOrCalled)
+        createModulesAndDependentsOfDependents(modCalled, modulesUsedOrCalled, modulesDependents)
     else:
         modulesUsedOrCalled.add(modCalled)
 
