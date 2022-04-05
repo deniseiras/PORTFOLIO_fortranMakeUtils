@@ -43,8 +43,8 @@ class Method:
 
     def __eq__(self, other):
         if isinstance(other, Method):
-            # return ((self.name == other.name) and (self.module.name == other.module.name) and (self.methodType == other.methodType))
-            return self.__repr__() == other.__repr__()
+            return ((self.name == other.name) and (self.module.name == other.module.name) and (self.methodType == other.methodType))
+            # return self.__repr__() == other.__repr__()
         else:
             return False
 
