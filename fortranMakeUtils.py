@@ -122,6 +122,7 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
             insideModule = None
             for line in file:
                 strings = line.split()
+                insideMethod = None
                 if len(strings) > 0:
                     if len(strings) > 1 and isRoutine(strings[0]):
                         method = strings[1].split("(")[0].lower()
