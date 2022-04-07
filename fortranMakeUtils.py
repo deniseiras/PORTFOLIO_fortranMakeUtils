@@ -120,9 +120,10 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
     for filename in filesInitialDir:
         with open(filename) as file:
             insideModule = None
+            insideMethod = None
             for line in file:
                 strings = line.split()
-                insideMethod = None
+                
                 if len(strings) > 0:
                     if len(strings) > 1 and isRoutine(strings[0]):
                         method = strings[1].split("(")[0].lower()
@@ -235,7 +236,7 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
         if len(modDependent) > 0:
             modDependent = modDependent[0]
             modCalled.dependsOn = modCalled.dependsOn.union(modDependent.dependsOn)
-            createModulesAndDependentsOfDependents(modCalled, modulesUsedOrCalled, modulesDependents)
+            createModulesAndDependentsOfDependents(modCalled, modulesUsedOrCalled, modulesDependents, 100)
         else:
             modulesUsedOrCalled.add(modCalled)
 

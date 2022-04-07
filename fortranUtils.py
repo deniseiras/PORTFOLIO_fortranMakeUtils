@@ -228,10 +228,18 @@ def createModulesAndDependentsOfCaller(modules, caller):
     modules.add(moduleCandidate)
 
 
-def createModulesAndDependentsOfDependents(module, modulesUsedOrCalled, modulesDependents):
-    # if module not in modulesUsedOrCalled:
+def createModulesAndDependentsOfDependents_internal(module, modulesUsedOrCalled, modulesDependents, max_level, count):
     for eachDep in module.dependsOn:
-        createModulesAndDependentsOfDependents(eachDep, modulesUsedOrCalled, modulesDependents)
+        count += 1
+        if count > max_level: 
+            break 
+        createModulesAndDependentsOfDependents_internal(eachDep, modulesUsedOrCalled, modulesDependents, max_level, count)
+
+
+def createModulesAndDependentsOfDependents(module, modulesUsedOrCalled, modulesDependents, max_level):
+    # if module not in modulesUsedOrCalled:
+    count = 0
+    createModulesAndDependentsOfDependents_internal(module, modulesUsedOrCalled, modulesDependents, max_level, count)
 
     modDependent = [modDep for modDep in modulesDependents if modDep == module]
     if len(modDependent) > 0:
