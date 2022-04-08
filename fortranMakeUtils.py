@@ -186,7 +186,7 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
                                             calledMethod = Method(strMethodCalled, insideModule, "function or interface")
                                             break
 
-                    if insideMethod is not None and calledMethod is not None and calledMethod != insideMethod: # dont includes calls of self (Recursive)
+                    if insideModule is not None and insideMethod is not None and calledMethod is not None and calledMethod != insideMethod: # dont includes calls of self (Recursive)
                         for eachMethod in methods:
                             if eachMethod.name == calledMethod.name:
                                 # TODO método chamado de qual módulo? pode também não ser módulo
