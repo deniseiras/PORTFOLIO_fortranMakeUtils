@@ -28,7 +28,7 @@ class Module:
         return self.filename.rsplit('/', 1)[-1]
 
     def getObjectName(self):
-        objectName = self.getOnlyFileName().replace(".f90", ".o").replace(".F90", ".o")
+        objectName = self.getOnlyFileName().replace(".f90", ".o").replace(".F90", ".o").replace(".F", ".o")
         return objectName
 
 
@@ -87,7 +87,7 @@ def getFiles(initialDir):
     files = []
     for root, dirs, filez in os.walk(initialDir):
         for filename in filez:
-            if filename.endswith('.f90') or filename.endswith('.F90'):
+            if filename.endswith('.f90') or filename.endswith('.F90') or filename.endswith('.F'):
                 files.append(root + "/" + filename)
     return files
 
