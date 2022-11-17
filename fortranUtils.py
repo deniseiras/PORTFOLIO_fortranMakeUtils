@@ -288,11 +288,13 @@ def createCallerTree(allCallers, max_level):
             createCallerTreeIntenal(caller, allCallers, callerLevel, max_level)
 
 
-def createCalleeTreeIntenal(calle, allCalles, calleeLevel, max_level):
+def createCalleeTreeIntenal(callee, allCalles, calleeLevel, max_level):
     if calleeLevel > max_level:
         return
     calleeLevel += 1
-    for eachCaller in calle.callers:
+    for eachCaller in callee.callers:
+        if callee.method == eachCaller.method:  # recursive
+            continue
         for eachCallee in allCalles:
             if eachCallee.method == eachCaller.method:
                 eachCaller.callers = eachCallee.callers
@@ -305,6 +307,8 @@ def createCallerTreeIntenal(caller, allCallers, callerLevel, max_level):
         return
     callerLevel += 1
     for eachCallee in caller.callees:
+        if caller.method == eachCallee.method:  # recursive
+            continue
         for eachCaller in allCallers:
             if eachCaller.method == eachCallee.method:
                 eachCallee.callees = eachCaller.callees

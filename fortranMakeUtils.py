@@ -65,7 +65,8 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
     modulesCalled = set()
 
 
-    sys.setrecursionlimit(max_level)
+    #just for do not raise an stack overflow, if maxlevel is too big
+    sys.setrecursionlimit(max_level+100)
 
     filesInitialDir = getFiles(initial_dir)
     print("Searching for modules and routines ( subroutines, functions, interfaces ) ...")
