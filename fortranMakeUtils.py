@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 # -*- coding: utf8 -*-
 
 ##########################################
@@ -12,9 +12,12 @@
 #
 # Enter the parameters:
 #
-# 1 - Max depth for search callers and callees (mandatory)
-# 2 - Filename of the interested routine - if you want to restrict the search to this file and subroutine.
-# 3 - Interested routine to be searched - if you want to restrict the search to this file and subroutine.
+# 1 - Initial search directory (mandatory)
+# 2 - Output directory (mandatory)
+# 3 - Max depth for search callers and callees (mandatory)
+# 4 - Filename of the interested routine.
+# 5 - Interested routine to be searched.
+#  
 #
 # Generates files:
 #  - allMethodsCalled.txt: Displays all methods called for all source files.
@@ -206,7 +209,7 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
     createCallerTree(callers, max_level)
     print("Creating modules dependencies ...")
     if filename_search is not None:
-        rootMethod = [m for m in methods if filename_search == m.module.filename and m.name == routine_search]
+        rootMethod = [m for m in methods if filename_search in m.module.filename and m.name == routine_search]
         if len(rootMethod) == 0:
             print("File " + filename_search + " or/and method " + routine_search + " not found")
             exit()
