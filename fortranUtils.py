@@ -288,6 +288,7 @@ def createCallerTree(allCallers, max_level):
             createCallerTreeIntenal(caller, allCallers, callerLevel, max_level)
 
 
+# BUG B3
 def createCalleeTreeIntenal(callee, allCalles, calleeLevel, max_level):
     if calleeLevel > max_level:
         return
@@ -301,7 +302,7 @@ def createCalleeTreeIntenal(callee, allCalles, calleeLevel, max_level):
                 break
         createCalleeTreeIntenal(eachCaller, allCalles, calleeLevel, max_level)
 
-
+# BUG B3
 def createCallerTreeIntenal(caller, allCallers, callerLevel, max_level):
     if callerLevel > max_level:
         return
@@ -316,36 +317,46 @@ def createCallerTreeIntenal(caller, allCallers, callerLevel, max_level):
         createCallerTreeIntenal(eachCallee, allCallers, callerLevel, max_level)
 
 
+# BUG B3
 def writeCallees(allCallees, out_dir, max_level):
     fileCalleeName = "{}/calleeTree.txt".format(out_dir)
-    print("Creating callee tree file {0} ...".format(fileCalleeName))
+    fileCalleeDotName = "{}/calleeTree.dot".format(out_dir)
+    print(f'Creating callee tree files {fileCalleeName} , {fileCalleeDotName} ...')
     fileCallee = open(fileCalleeName, 'w')
+    fileCalleeDot = open(fileCalleeDotName, 'w')
     level = 0
+    fileCalleeDot.write('digraph G {\n')
     for callee in allCallees:
-        writeCalleesInternal(fileCallee, callee, level, max_level)
+        writeCalleesInternal(fileCallee, fileCalleeDot, callee, level, max_level)
+    fileCalleeDot.write('}')
 
-
+# BUG B3
 def writeCallers(allCallers, methodsInCallerTree, out_dir, max_level):
     fileCallerName = "{}/callerTree.txt".format(out_dir)
+    fileCallerDotName = "{}/callerTree.dot".format(out_dir)
     print("Creating caller tree file " + fileCallerName + " ...")
     fileCaller = open(fileCallerName, 'w')
+    fileCallerDot = open(fileCallerDotName, 'w')
     level = 0
+    fileCallerDot.write('digraph G {\n')
     for caller in allCallers:
-        writeCallersInternal(fileCaller, caller, level, methodsInCallerTree, max_level)
+        writeCallersInternal(fileCaller, fileCallerDot, caller, level, methodsInCallerTree, max_level)
+    fileCallerDot.write('}')
 
-
-def writeCalleesInternal(fileCallee, callee, level, max_level):
+# BUG B3
+def writeCalleesInternal(fileCallee, fileCalleeDot, callee, level, max_level):
     if level > max_level:
         return
     fileCallee.write(("\t" * level) + callee.method.__str__() + "\n")
     if len(callee.callers) > 0:
         level += 1
         for eachCaller in callee.callers:
-            writeCalleesInternal(fileCallee, eachCaller, level, max_level)
+            fileCalleeDot.write(f'    {callee.method.name} -> {eachCaller.method.name}; \n')
+            writeCalleesInternal(fileCallee, fileCalleeDot, eachCaller, level, max_level)
         level -= 1
 
 
-def writeCallersInternal(fileCaller, caller, level, methodsInCallerTree, max_level):
+def writeCallersInternal(fileCaller, fileCallerDot, caller, level, methodsInCallerTree, max_level):
     if level > max_level:
         return
     fileCaller.write(("\t" * level) + caller.method.__str__() + "\n")
@@ -353,7 +364,8 @@ def writeCallersInternal(fileCaller, caller, level, methodsInCallerTree, max_lev
     if len(caller.callees) > 0:
         level += 1
         for eachCallee in caller.callees:
-            writeCallersInternal(fileCaller, eachCallee, level, methodsInCallerTree, max_level)
+            fileCallerDot.write(f'    {caller.method.name} -> {eachCallee.method.name}; \n')
+            writeCallersInternal(fileCaller, fileCallerDot, eachCallee, level, methodsInCallerTree, max_level)
         level -= 1
 
 

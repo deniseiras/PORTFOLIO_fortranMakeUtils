@@ -26,15 +26,36 @@
 #  - methodsNotInCallerTree.txt: Displays all methods minus the methodsInCallerTree.
 #       This file is useful to work with the removeUnusedMethods.py script.
 #  - calleeTree.txt: Displays a tree containing which methods calls a method.
+#  - calleeTree.dot: Displays a tree containing which methods calls a method in dot format.
+#       Use  dot -Tjpg ./output_test2/calleeTree.dot -o ./output_test2/calleeTree.gif to generate graph gif
 #  - callerTree.txt: Displays a tree containing methods called from a method.
+#  - calleeTree.dot: Displays a tree containing methods called from a method. in dot format
+#       Use  dot -Tjpg ./output_test2/calleeTree.dot -o ./output_test2/calleeTree.gif to generate graph gif
 #  - objects.mk: File to include in Makefile: Contains source ".f90" and objects ".o" files.
 #       This file is also usefull for use in removeUnusedFiles.py script.
 #  - depend.mk: File to include in Makefile: Shows the dependency between object files.
 #
 #
 # BUG:
-# * stackoverflow when a program.f90 call a methods - must fix when using programs
-# * allMethodsNotCalled.txt does not regards the father calller. calleTree.txt and callerTree.txt regards.
+# * B1: stackoverflow when a program.f90 call a methods - must fix when using programs
+# * B2: allMethodsNotCalled.txt does not regards the father calller. calleTree.txt and callerTree.txt regards.
+# * B3: not stoping on recursive. Check in createCalle*TreeIntenal in writeCalles . The same in Callers 
+# Example: 
+#
+#[denis.eiras@headnode 139]$ more output_test2/calleeTree.txt 
+#fortranMakeUtils/fortranFiles//var_tables.f90	subroutine	vtables2_i
+#	fortranMakeUtils/fortranFiles//var_tables.f90	subroutine	insertvtab_2d_i
+#fortranMakeUtils/fortranFiles//cptecBramsIoFacade.f90	interface	getvariable
+#	fortranMakeUtils/fortranFiles//module2.f90	subroutine	used2
+#		fortranMakeUtils/fortranFiles//module2.f90	subroutine	main
+#fortranMakeUtils/fortranFiles//rio.f90	subroutine	definenamefilewrite
+#	fortranMakeUtils/fortranFiles//rio.f90	subroutine	savebinmpiio
+#		fortranMakeUtils/fortranFiles//rio.f90	subroutine	outputfields
+#			fortranMakeUtils/fortranFiles//cptecBramsIo.f90	subroutine	writebramshistorydelegee
+#				fortranMakeUtils/fortranFiles//cptecBramsIoFacade.f90	subroutine	writebramshistory
+#				fortranMakeUtils/fortranFiles//cptecBramsIo.f90	subroutine	writebramshistorydelegee
+#					fortranMakeUtils/fortranFiles//cptecBramsIoFacade.f90	subroutine	writebramshistory
+#					fortranMakeUtils/fortranFiles//cptecBramsIo.f90	subroutine	writebramshistorydelegee
 #
 ##########################################
 
