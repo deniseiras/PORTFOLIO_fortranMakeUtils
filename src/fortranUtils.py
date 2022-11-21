@@ -280,14 +280,6 @@ def createCalleeTree(allCallees, max_level):
             createCalleeTreeIntenal(callee, allCallees, calleeLevel, max_level)
 
 
-def createCallerTree(allCallers, max_level):
-    print("creating caller tree ...")
-    callerLevel = 0
-    for caller in allCallers:
-        if len(caller.callees) > 0:
-            createCallerTreeIntenal(caller, allCallers, callerLevel, max_level)
-
-
 # BUG B3
 def createCalleeTreeIntenal(callee, allCalles, calleeLevel, max_level):
     if calleeLevel > max_level:
@@ -301,6 +293,15 @@ def createCalleeTreeIntenal(callee, allCalles, calleeLevel, max_level):
                 eachCaller.callers = eachCallee.callers
                 break
         createCalleeTreeIntenal(eachCaller, allCalles, calleeLevel, max_level)
+
+
+def createCallerTree(allCallers, max_level):
+    print("creating caller tree ...")
+    callerLevel = 0
+    for caller in allCallers:
+        if len(caller.callees) > 0:
+            createCallerTreeIntenal(caller, allCallers, callerLevel, max_level)
+
 
 # BUG B3
 def createCallerTreeIntenal(caller, allCallers, callerLevel, max_level):
