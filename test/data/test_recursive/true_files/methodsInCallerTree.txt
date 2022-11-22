@@ -1,0 +1,5 @@
+test/data/test_recursive/fortran_files/module_recursive.f90	recursiva()	recursiva
+test/data/test_recursive/fortran_files/module_recursive.f90	recursive_inside()	recursive_inside
+test/data/test_recursive/fortran_files/module_recursive.f90	subroutine	non_recursive
+test/data/test_recursive/fortran_files/module_recursive.f90	subroutine	recursiva
+test/data/test_recursive/fortran_files/module_recursive.f90	subroutine	recursive_inside

@@ -34,7 +34,7 @@
 import re
 import shutil
 
-from fortranUtils import getFiles, getMethodsParameter, isFortran95Keyword, isComment
+from src.fortranMakeUtils.fortranUtils import getFiles, getMethodsParameter, isFortran95Keyword, isComment
 
 # start program ==================
 methodsParameter = getMethodsParameter()

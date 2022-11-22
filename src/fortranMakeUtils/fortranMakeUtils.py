@@ -61,7 +61,8 @@
 
 import re
 import sys
-from fortranUtils import *
+import os
+from src.fortranMakeUtils.fortranUtils import *
 
 
 def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=None):
@@ -71,6 +72,9 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
     print('Using python {}.{}'.format(sys.version_info[0], sys.version_info[1]))
     if sys.version_info[0] < 3:
         raise Exception("Must be using Python 3")
+
+    if not os.path.exists(out_dir):
+        os.mkdir(out_dir)
 
     methods = set()
     allMethods = set()
@@ -284,8 +288,6 @@ if __name__ == "__main__":
 
     initial_dir = methodsParameter[1]
     out_dir = methodsParameter[2]
-    if not os.path.exists(out_dir):
-        os.mkdir(out_dir)
     max_level = int(methodsParameter[3])
     if len(methodsParameter) == 6:
         filename_search = methodsParameter[4]
@@ -294,5 +296,5 @@ if __name__ == "__main__":
         filename_search = None
         routine_search = None
 
-    main(initial_dir, max_level, out_dir, filename_search, routine_search)
+#     main(initial_dir, max_level, out_dir, filename_search, routine_search)
 

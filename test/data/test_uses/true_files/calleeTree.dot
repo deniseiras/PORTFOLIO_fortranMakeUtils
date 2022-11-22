@@ -1,0 +1,5 @@
+digraph G {
+    mainused1 -> mainused1; 
+    mainused1 -> recursiva; 
+    recursiva -> recursiva; 
+}
