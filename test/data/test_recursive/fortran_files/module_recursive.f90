@@ -12,7 +12,7 @@ contains
     recursive subroutine recursive_inside()
         call recursive_inside()
         call non_recursive()
-    end subroutine uses_module1
+    end subroutine recursive_inside
     
     subroutine non_recursive()
         ! ignorethis

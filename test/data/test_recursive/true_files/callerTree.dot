@@ -1,7 +1,7 @@
 digraph G {
-    recursive_inside -> recursive_inside; 
-    recursive_inside -> non_recursive; 
-    recursiva -> recursive_inside; 
-    recursiva -> recursiva; 
     recursiva -> non_recursive; 
+    recursiva -> recursiva; 
+    recursiva -> recursive_inside; 
+    recursive_inside -> non_recursive; 
+    recursive_inside -> recursive_inside; 
 }

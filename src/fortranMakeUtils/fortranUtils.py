@@ -327,7 +327,7 @@ def writeCallees(allCallees, out_dir, max_level):
     fileCalleeDot = open(fileCalleeDotName, 'w')
     level = 0
     fileCalleeDot.write('digraph G {\n')
-    for callee in allCallees:
+    for callee in sorted(allCallees, key=lambda c: c.method.__str__()):
         writeCalleesInternal(fileCallee, fileCalleeDot, callee, level, max_level)
     fileCalleeDot.write('}')
 
@@ -340,7 +340,7 @@ def writeCallers(allCallers, methodsInCallerTree, out_dir, max_level):
     fileCallerDot = open(fileCallerDotName, 'w')
     level = 0
     fileCallerDot.write('digraph G {\n')
-    for caller in allCallers:
+    for caller in sorted(allCallers, key=lambda c: c.method.__str__()):
         writeCallersInternal(fileCaller, fileCallerDot, caller, level, methodsInCallerTree, max_level)
     fileCallerDot.write('}')
 
@@ -351,7 +351,7 @@ def writeCalleesInternal(fileCallee, fileCalleeDot, callee, level, max_level):
     fileCallee.write(("\t" * level) + callee.method.__str__() + "\n")
     if len(callee.callers) > 0:
         level += 1
-        for eachCaller in callee.callers:
+        for eachCaller in sorted(callee.callers, key=lambda c: c.method.__str__()):
             fileCalleeDot.write(f'    {callee.method.name} -> {eachCaller.method.name}; \n')
             writeCalleesInternal(fileCallee, fileCalleeDot, eachCaller, level, max_level)
         level -= 1
@@ -364,7 +364,7 @@ def writeCallersInternal(fileCaller, fileCallerDot, caller, level, methodsInCall
     methodsInCallerTree.add(caller.method)
     if len(caller.callees) > 0:
         level += 1
-        for eachCallee in caller.callees:
+        for eachCallee in sorted(caller.callees, key=lambda c: c.method.__str__()):
             fileCallerDot.write(f'    {caller.method.name} -> {eachCallee.method.name}; \n')
             writeCallersInternal(fileCaller, fileCallerDot, eachCallee, level, methodsInCallerTree, max_level)
         level -= 1
