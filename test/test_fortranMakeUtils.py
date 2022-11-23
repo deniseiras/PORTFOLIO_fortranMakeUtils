@@ -8,6 +8,9 @@ from src.fortranMakeUtils import fortranMakeUtils as fmu
 class FortranMakeUtilsTests(TestCase):
 
 
+    # tests implementations
+    #
+
     def test_recursive(self):
         testname_dir = 'test_recursive'
         dir_fortran_files, dir_true, dir_result = self.get_directories_string(testname_dir)
@@ -21,6 +24,16 @@ class FortranMakeUtilsTests(TestCase):
         fmu.main(dir_fortran_files, 100, dir_result)
         self.assert_all_out_files(dir_true, dir_result)
 
+
+    def test_uses_modules(self):
+        testname_dir = 'test_uses_modules'
+        dir_fortran_files, dir_true, dir_result = self.get_directories_string(testname_dir)
+        fmu.main(dir_fortran_files, 100, dir_result)
+        self.assert_all_out_files(dir_true, dir_result)
+
+
+    # util functions
+    #
 
     def get_directories_string(self, testname_dir):
         dir_fortran_files = f'test/data/{testname_dir}/fortran_files'
