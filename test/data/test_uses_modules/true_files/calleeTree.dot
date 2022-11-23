@@ -1,6 +1,6 @@
 digraph G {
-    func1 -> calls_routines; 
     calls_routines -> main_routines; 
+    func1 -> calls_routines; 
     func1 -> main_routines; 
     sub1 -> calls_routines; 
     sub1 -> main_routines; 
