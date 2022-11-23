@@ -1,0 +1,4 @@
+test/data/test_uses_modules/fortran_files/module_used/module_used.f90	function	func1
+test/data/test_uses_modules/fortran_files/module_used/module_used.f90	subroutine	calls_routines
+test/data/test_uses_modules/fortran_files/module_used/module_used.f90	subroutine	sub1
+test/data/test_uses_modules/fortran_files/module_uses/module_uses.f90	subroutine	main_routines
