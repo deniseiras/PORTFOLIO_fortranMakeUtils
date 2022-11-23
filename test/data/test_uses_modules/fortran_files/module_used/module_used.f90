@@ -16,7 +16,7 @@ contains
     end function func1
 
     ! calls 
-    subroutine calls_routines
+    subroutine calls_routines()
         integer :: sum
         call sub1(5, 10)
         sum = func1(5,10)
