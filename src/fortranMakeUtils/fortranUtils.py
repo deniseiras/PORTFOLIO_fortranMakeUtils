@@ -93,19 +93,19 @@ def getFiles(initialDir):
 
 
 def isRoutine(candidate):
-    return candidate.lower() in ["subroutine", "function"]
+    return candidate in ["subroutine", "function"]
 
 
 def isFunction(candidate):
-    return candidate.lower() == "function"
+    return candidate == "function"
 
 
 def isDependency(candidate):
-    return candidate.lower() in ["subroutine", "function", "interface"]
+    return candidate in ["subroutine", "function", "interface"]
 
 
 def isEndString(candidate):
-    return candidate.lower() == "end"
+    return candidate == "end"
 
 
 def isComment(candidate):
@@ -113,21 +113,21 @@ def isComment(candidate):
 
 
 def isInterfaceRoutine(candidate):
-    return candidate.lower() == "procedure"
+    return candidate == "procedure"
 
 
 def isModule(candidate):
-    return candidate.lower() == "module"
+    return candidate == "module"
 
 def isRecursive(candidate):
-    return candidate.lower() == "recursive"
+    return candidate == "recursive"
 
 def isUsedModule(candidade):
-    return candidade.lower() == "use"
+    return candidade == "use"
 
 
 def isFortranIntrinsicFucntions(candidate):
-    return candidate.lower() in [
+    return candidate in [
         'abs', 'achar', 'acos', 'acosh', 'adjustl', 'adjustr', 'aimag', 'aint', 'all', 'allocated', 'anint', 'any',
         'asin', 'asinh', 'associated', 'atan', 'atan2', 'atanh', 'atomic_add', 'atomic_and', 'atomic_cas',
         'atomic_define', 'atomic_fetch_add', 'atomic_fetch_and', 'atomic_fetch_or', 'atomic_fetch_xor', 'atomic_or',
@@ -152,13 +152,13 @@ def isFortranIntrinsicFucntions(candidate):
 
 
 def isOthreFortranKeywords(candidate):
-    return candidate.lower() in ['in', 'inout', 'file', 'form', 'iostat', 'status', 'action', 'integer', 'character',
+    return candidate in ['in', 'inout', 'file', 'form', 'iostat', 'status', 'action', 'integer', 'character',
                                  'logical', 'real', 'struct', 'unit', 'false', 'true', 'not', 'and', 'or', 'eq', 'ne',
                                  'lt', 'ge', 'le', 'eqv', 'neqv', 'enddo', 'endif', 'none', 'kind', 'include']
 
 
 def isFortran77Keyword(candidate):
-    return isFortranIntrinsicFucntions(candidate) or isOthreFortranKeywords(candidate) or candidate.lower() in [
+    return isFortranIntrinsicFucntions(candidate) or isOthreFortranKeywords(candidate) or candidate in [
         'assign', 'backspace', 'block data', 'call', 'close', 'common', 'continue', 'data', 'dimension', 'do', 'else',
         'else if', 'end', 'endfile', 'endif', 'entry', 'equivalence', 'external', 'format', 'function', 'goto', 'if',
         'implicit', 'inquire', 'intrinsic', 'open', 'parameter', 'pause', 'print', 'program', 'read', 'return',
@@ -167,18 +167,18 @@ def isFortran77Keyword(candidate):
 
 
 def isFortran90Keyword(candidate):
-    return isFortran77Keyword(candidate) or candidate.lower() in [
+    return isFortran77Keyword(candidate) or candidate in [
         'allocatable', 'allocate', 'case', 'contains', 'cycle', 'deallocate', 'elsewhere', 'exit?, include',
         'interface', 'intent', 'module', 'namelist', 'nullify', 'only', 'operator', 'optional', 'pointer', 'private',
         'procedure', 'public', 'recursive', 'result', 'select', 'sequence', 'target', 'use', 'while', 'where']
 
 
 def isFortran95Keyword(candidate):
-    return isFortran90Keyword(candidate) or candidate.lower() in ['elemental', 'forall', 'pure']
+    return isFortran90Keyword(candidate) or candidate in ['elemental', 'forall', 'pure']
 
 
 def isFortran2003Keyword(candidate):
-    return isFortran95Keyword(candidate) or candidate.lower() in ['abstract', 'associate', 'asynchronous', 'bind',
+    return isFortran95Keyword(candidate) or candidate in ['abstract', 'associate', 'asynchronous', 'bind',
                                                                   'class', 'deferred', 'enum',
                                                                   'enumerator', 'extends', 'final', 'flush', 'generic',
                                                                   'import', 'non_overridable',
@@ -187,7 +187,7 @@ def isFortran2003Keyword(candidate):
 
 
 def isFortran2008Keyword(candidate):
-    return isFortran2003Keyword(candidate) or candidate.lower() in ['block', 'codimension', 'do concurrent',
+    return isFortran2003Keyword(candidate) or candidate in ['block', 'codimension', 'do concurrent',
                                                                     'contiguous', 'critical', 'error stop',
                                                                     'submodule', 'sync all', 'sync images',
                                                                     'sync memory', 'lock', 'unlock']

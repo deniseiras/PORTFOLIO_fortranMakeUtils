@@ -87,6 +87,7 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
         strings = []
         with open(filename) as file:
             for line in file:
+                line = line.lower()
                 stringsLine = re.split("\n| |,", line)
                 stringsLine = list(filter(None, stringsLine))
                 if len(stringsLine) > 0:
@@ -104,29 +105,29 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
 
                     if len(strings) > 1 and isDependency(strings[0]):
                         # TODO interface block (interface in 1 line, subroutine in second line)
-                        method = strings[1].split("(")[0].lower()
+                        method = strings[1].split("(")[0]
                         mod = Module(filename, None)
-                        met = Method(method, mod, strings[0].lower())
+                        met = Method(method, mod, strings[0])
                         allMethods.add(met)
                     if len(strings) > 1 and isRecursive(strings[0]) and isRoutine(strings[1]):
-                        method = strings[2].split("(")[0].lower()
+                        method = strings[2].split("(")[0]
                         mod = Module(filename, None)
-                        met = Method(method, mod, strings[1].lower())
+                        met = Method(method, mod, strings[1])
                         allMethods.add(met)
                     # logical function ... etc
                     elif len(strings) > 2 and not isEndString(strings[0]) and isFunction(strings[1]):
-                        method = strings[2].split("(")[0].lower()
+                        method = strings[2].split("(")[0]
                         mod = Module(filename, None)
-                        met = Method(method, mod, strings[1].lower())
+                        met = Method(method, mod, strings[1])
                         allMethods.add(met)
                     elif len(strings) > 2 and isInterfaceRoutine(strings[1]):
                         for idx in range(2, len(strings)):
-                            method = strings[idx].lower()
+                            method = strings[idx]
                             mod = Module(filename, None)
                             met = Method(method, mod, "procedure")
                             interfaceMethods.add(met)
                     elif len(strings) > 1 and isModule(strings[0]):
-                        mod = Module(filename, strings[1].lower())
+                        mod = Module(filename, strings[1])
                         modules.add(mod)
 
     # removes subroutines and functions from interfaces ...
@@ -138,19 +139,20 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
             insideModule = None
             insideMethod = None
             for line in file:
+                line = line.lower()
                 strings = line.split()
                 
                 if len(strings) > 0:
                     if len(strings) > 1 and isRoutine(strings[0]):
-                        method = strings[1].split("(")[0].lower()
+                        method = strings[1].split("(")[0]
                         mod = Module(filename, None)
-                        insideMethod = Method(method, mod, strings[0].lower())
+                        insideMethod = Method(method, mod, strings[0])
                         continue
                     # real function , recursive subroutine ...
                     if len(strings) > 1 and not isEndString(strings[0]) and isRoutine(strings[1]):
-                        method = strings[2].split("(")[0].lower()
+                        method = strings[2].split("(")[0]
                         mod = Module(filename, None)
-                        insideMethod = Method(method, mod, strings[2].lower())
+                        insideMethod = Method(method, mod, strings[2])
                         continue
                     elif len(strings) == 2 and isModule(strings[0]):
                         insideModule = Module(filename, strings[1])
@@ -168,7 +170,7 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
 
                     # using module
                     if isUsedModule(strings[0]):
-                        strUsedModule = strings[1].split(",")[0].lower()
+                        strUsedModule = strings[1].split(",")[0]
                         modUsed = [mod for mod in modules if mod.name == strUsedModule]
                         if len(modUsed) > 0:  # maybe exists one module with same name in diferent files?
                             for eachModUsed in modUsed:
@@ -186,7 +188,7 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
 
                     # calling subroutine
                     if strings[0] == "call":
-                        strMethodCalled = strings[1].split("(")[0].lower()
+                        strMethodCalled = strings[1].split("(")[0]
                         # TODO método chamado de qual módulo? insideModule está errado
                         calledMethod = Method(strMethodCalled, insideModule, "subroutine or interface")
                     else:
@@ -195,15 +197,14 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
                                 not isEndString(strings[0]) and not isComment(strings[0]):
                             for eachString in strings:
                                 if "(" in eachString:
-                                    strMethodCalled = eachString.split("(")[0].lower()
+                                    strMethodCalled = eachString.split("(")[0]
                                     for eachMethod in methods:
                                         if eachMethod.name == strMethodCalled: # TODO e método chamado está sendo usado !
                                             # TODO método chamado de qual módulo? insideModule está errado
 
                                             # check if is inside a string, then ignores:
-                                            lowerline = line.lower()
-                                            if ('\'' in lowerline and lowerline.index('\'') < lowerline.index(strMethodCalled)) or \
-                                                '\"' in lowerline and lowerline.index('\"') < lowerline.index(strMethodCalled):
+                                            if ('\'' in line and line.index('\'') < line.index(strMethodCalled)) or \
+                                                '\"' in line and line.index('\"') < line.index(strMethodCalled):
                                                 continue
                                             calledMethod = Method(strMethodCalled, insideModule, "function or interface")
                                             break
