@@ -39,23 +39,10 @@
 # BUG:
 # * B1: stackoverflow when a program.f90 call a methods - must fix when using programs
 # * B2: allMethodsNotCalled.txt does not regards the father calller. calleTree.txt and callerTree.txt regards.
-# * B3: not stoping on recursive. Check in createCalle*TreeIntenal in writeCalles . The same in Callers 
-# Example: 
 #
-#[denis.eiras@headnode 139]$ more output_test2/calleeTree.txt 
-#fortranMakeUtils/fortranFiles//var_tables.f90	subroutine	vtables2_i
-#	fortranMakeUtils/fortranFiles//var_tables.f90	subroutine	insertvtab_2d_i
-#fortranMakeUtils/fortranFiles//cptecBramsIoFacade.f90	interface	getvariable
-#	fortranMakeUtils/fortranFiles//module2.f90	subroutine	used2
-#		fortranMakeUtils/fortranFiles//module2.f90	subroutine	main
-#fortranMakeUtils/fortranFiles//rio.f90	subroutine	definenamefilewrite
-#	fortranMakeUtils/fortranFiles//rio.f90	subroutine	savebinmpiio
-#		fortranMakeUtils/fortranFiles//rio.f90	subroutine	outputfields
-#			fortranMakeUtils/fortranFiles//cptecBramsIo.f90	subroutine	writebramshistorydelegee
-#				fortranMakeUtils/fortranFiles//cptecBramsIoFacade.f90	subroutine	writebramshistory
-#				fortranMakeUtils/fortranFiles//cptecBramsIo.f90	subroutine	writebramshistorydelegee
-#					fortranMakeUtils/fortranFiles//cptecBramsIoFacade.f90	subroutine	writebramshistory
-#					fortranMakeUtils/fortranFiles//cptecBramsIo.f90	subroutine	writebramshistorydelegee
+# FIXED:
+#
+# * B3: considering strings as routines. Must not consider
 #
 ##########################################
 
@@ -212,6 +199,12 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
                                     for eachMethod in methods:
                                         if eachMethod.name == strMethodCalled: # TODO e método chamado está sendo usado !
                                             # TODO método chamado de qual módulo? insideModule está errado
+
+                                            # check if is inside a string, then ignores:
+                                            lowerline = line.lower()
+                                            if ('\'' in lowerline and lowerline.index('\'') < lowerline.index(strMethodCalled)) or \
+                                                '\"' in lowerline and lowerline.index('\"') < lowerline.index(strMethodCalled):
+                                                continue
                                             calledMethod = Method(strMethodCalled, insideModule, "function or interface")
                                             break
 

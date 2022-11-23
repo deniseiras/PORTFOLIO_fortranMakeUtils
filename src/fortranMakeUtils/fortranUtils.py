@@ -303,7 +303,6 @@ def createCallerTree(allCallers, max_level):
             createCallerTreeIntenal(caller, allCallers, callerLevel, max_level)
 
 
-# BUG B3
 def createCallerTreeIntenal(caller, allCallers, callerLevel, max_level):
     if callerLevel > max_level:
         return
@@ -318,7 +317,6 @@ def createCallerTreeIntenal(caller, allCallers, callerLevel, max_level):
         createCallerTreeIntenal(eachCallee, allCallers, callerLevel, max_level)
 
 
-# BUG B3
 def writeCallees(allCallees, out_dir, max_level):
     fileCalleeName = "{}/calleeTree.txt".format(out_dir)
     fileCalleeDotName = "{}/calleeTree.dot".format(out_dir)
@@ -331,7 +329,7 @@ def writeCallees(allCallees, out_dir, max_level):
         writeCalleesInternal(fileCallee, fileCalleeDot, callee, level, max_level)
     fileCalleeDot.write('}')
 
-# BUG B3
+
 def writeCallers(allCallers, methodsInCallerTree, out_dir, max_level):
     fileCallerName = "{}/callerTree.txt".format(out_dir)
     fileCallerDotName = "{}/callerTree.dot".format(out_dir)
@@ -344,7 +342,7 @@ def writeCallers(allCallers, methodsInCallerTree, out_dir, max_level):
         writeCallersInternal(fileCaller, fileCallerDot, caller, level, methodsInCallerTree, max_level)
     fileCallerDot.write('}')
 
-# BUG B3
+
 def writeCalleesInternal(fileCallee, fileCalleeDot, callee, level, max_level):
     if level > max_level:
         return

@@ -1,0 +1,1 @@
+test/data/test_ignore_routine_in_string/fortran_files/module_ignore_string.f90	subroutine	ignorestring
