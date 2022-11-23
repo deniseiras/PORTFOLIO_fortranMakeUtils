@@ -296,5 +296,5 @@ if __name__ == "__main__":
         filename_search = None
         routine_search = None
 
-#     main(initial_dir, max_level, out_dir, filename_search, routine_search)
+    main(initial_dir, max_level, out_dir, filename_search, routine_search)
 
