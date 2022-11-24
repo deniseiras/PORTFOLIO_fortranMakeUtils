@@ -4,13 +4,10 @@ import os
 sys.path.append('../src')
 from src.fortranMakeUtils import fortranMakeUtils as fmu
 
-
 class FortranMakeUtilsTests(TestCase):
-
 
     # tests implementations
     #
-
     def test_recursive(self):
         testname_dir = 'test_recursive'
         dir_fortran_files, dir_true, dir_result = self.get_directories_string(testname_dir)
@@ -45,6 +42,7 @@ class FortranMakeUtilsTests(TestCase):
         fmu.main(dir_fortran_files, 100, dir_result)
         self.assert_all_out_files(dir_true, dir_result)
 
+
     # util functions
     #
 
@@ -56,6 +54,7 @@ class FortranMakeUtilsTests(TestCase):
 
 
     def assert_all_out_files(self, dir_true, dir_result):
+        self.assertNotEqual(len(os.listdir(dir_true)), 0)
         for true_file in os.listdir(dir_true):
             true_file_path = os.path.join(dir_true, true_file)
             result_file_path = os.path.join(dir_result, true_file)
