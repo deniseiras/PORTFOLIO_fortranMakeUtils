@@ -32,6 +32,19 @@ class FortranMakeUtilsTests(TestCase):
         self.assert_all_out_files(dir_true, dir_result)
 
 
+    def test_uses_interfaces(self):
+        testname_dir = 'test_uses_interfaces'
+        dir_fortran_files, dir_true, dir_result = self.get_directories_string(testname_dir)
+        fmu.main(dir_fortran_files, 100, dir_result)
+        self.assert_all_out_files(dir_true, dir_result)
+
+
+    def test_uses_abstract_interfaces(self):
+        testname_dir = 'test_uses_abstract_interfaces'
+        dir_fortran_files, dir_true, dir_result = self.get_directories_string(testname_dir)
+        fmu.main(dir_fortran_files, 100, dir_result)
+        self.assert_all_out_files(dir_true, dir_result)
+
     # util functions
     #
 
