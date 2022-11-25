@@ -1,6 +1,4 @@
-from codecs import ignore_errors
 import os
-import sys
 
 
 class Module:

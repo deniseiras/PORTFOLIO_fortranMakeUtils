@@ -1,7 +1,6 @@
 from unittest import TestCase   
 import sys
 import os
-sys.path.append('../src')
 from src.fortranMakeUtils import fortranMakeUtils as fmu
 
 class FortranMakeUtilsTests(TestCase):
@@ -61,4 +60,5 @@ class FortranMakeUtilsTests(TestCase):
             self.assertTrue(os.path.exists(result_file_path))
             with open(true_file_path, 'r', encoding="utf-8") as true_file:
                 with open(result_file_path, 'r', encoding="utf-8") as result_file:
+                    print(f'Files differ: {true_file.read()}, {result_file.read()}')
                     self.assertEqual(true_file.read(), result_file.read())
