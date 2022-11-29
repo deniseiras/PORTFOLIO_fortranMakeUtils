@@ -42,11 +42,18 @@ Result:
 *Creating methods called of all files: file ./out_dir/allMethodsCalled.txt*  
 *Creating methods not called of all files: file ./out_dir/allMethodsNotCalled.txt*  
 *Creating callee tree files ./out_dir/calleeTree.txt , ./out_dir/calleeTree.dot ...*  
-*Creating caller tree file ./out_dir/callerTree.txt ...*  
+*Creating caller tree file ./out_dir/callerTree.txt , ./out_dir/callerTree.dot ...*  
 *Creating methods in Caller Tree: file ./out_dir/methodsInCallerTree.txt*  
 *Creating methods not in Caller Tree: file ./out_dir/methodsNotinCallerTree.txt*  
 *Creating objects file: ./out_dir/objects.mk ...*  
 *Creating dependecies file: ./out_dir/depend.mk ...*  
+
+To generate a nice graph of callers, for example, use Graphviz (https://graphviz.org/):
+
+```
+dot -Tjpeg ./out_dir/callerTree.dot -o callerTree.jpg
+```
+![image](https://user-images.githubusercontent.com/6113640/204527532-87cdc5a0-b7ad-4d2d-aec5-c2be228b51e6.png)
 
 
 ## Contributions
