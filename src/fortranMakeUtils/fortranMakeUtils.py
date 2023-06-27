@@ -49,7 +49,7 @@
 import re
 import sys
 import os
-from src.fortranMakeUtils.fortranUtils import *
+from src.fortranMetaData.fortranMetaData import *
 
 
 def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=None):
