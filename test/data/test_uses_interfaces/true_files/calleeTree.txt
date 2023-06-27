@@ -1,2 +1,4 @@
+test/data/test_uses_interfaces/fortran_files/module_interfaces/module_interfaces.f90	subroutine	s3
+	test/data/test_uses_interfaces/fortran_files/module_uses/module_uses.f90	subroutine	sub_uses
 test/data/test_uses_interfaces/fortran_files/module_uses/module_uses.f90	interface	ss
 	test/data/test_uses_interfaces/fortran_files/module_uses/module_uses.f90	subroutine	sub_uses

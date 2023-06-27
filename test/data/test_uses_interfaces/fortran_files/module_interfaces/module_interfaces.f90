@@ -1,4 +1,4 @@
-module interface
+module interfaces
 contains
     subroutine S1(IARG)
         IARG = 1
@@ -11,4 +11,4 @@ contains
         LARG = .true.
     end subroutine S3
 
-    end module interface
+    end module interfaces

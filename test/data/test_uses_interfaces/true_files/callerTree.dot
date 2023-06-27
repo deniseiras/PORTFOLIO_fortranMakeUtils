@@ -1,3 +1,4 @@
 digraph G {
+    sub_uses -> s3; 
     sub_uses -> ss; 
 }

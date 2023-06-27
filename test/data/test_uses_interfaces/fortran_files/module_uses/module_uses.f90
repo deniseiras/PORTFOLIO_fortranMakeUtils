@@ -1,6 +1,6 @@
 module uses
 
-    use interface
+    use interfaces
 
     interface SS
         subroutine SS1(IARG, JARG)
@@ -16,8 +16,11 @@ module uses
     end subroutine
 
     subroutine sub_uses
+
         call SS(3.14)              ! Calls subroutine S1 from M
         call SS(1, 2)             ! Calls subroutine SS1
+        call S3(.true.)           
+
     end subroutine sub_uses
 
 end module uses
