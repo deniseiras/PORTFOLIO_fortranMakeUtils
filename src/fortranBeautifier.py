@@ -14,21 +14,10 @@
 # Enter the parameters:
 #
 # 1 - Filename
+# TODO
 # 2 - Filename of the interested routine - if you want to restrict the search to this file and subroutine.
 # 3 - Interested routine to be searched - if you want to restrict the search to this file and subroutine.
 
-# Generates files:
-#  - allMethodsCalled.txt: Displays all methods called for all source files.
-#  - allMethodsNotCalled.txt: Displays all methods not called for all source files.
-#  - methodsInCallerTree.txt: Displays all methods displayed in caller tree.
-#  - methodsNotInCallerTree.txt: Displays all methods minus the methodsInCallerTree.
-#       This file is useful to work with the removeUnusedMethods.py script.
-#  - calleeTree.txt: Displays a tree containing which methods calls a method.
-#  - callerTree.txt: Displays a tree containing methods called from a method.
-#  - objects.mk: File to include in Makefile: Contains source ".f90" and objects ".o" files.
-#       This file is also usefull for use in removeUnusedFiles.py script.
-#  - depend.mk: File to include in Makefile: Shows the dependency between object files.
-#
 ##########################################
 
 import re
