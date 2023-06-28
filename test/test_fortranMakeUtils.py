@@ -6,45 +6,48 @@ from src.fortranMakeUtils import fortranMakeUtils as fmu
 
 class FortranMakeUtilsTests(TestCase):
 
+    
+    def setUp(self):
+        print(f'\n\nExecuting test ==================> {self._testMethodName}')
+
     # tests implementations
     #
     def test_recursive(self):
         testname_dir = 'test_recursive'
-        dir_fortran_files, dir_true, dir_result = self.get_directories_string(testname_dir)
-        fmu.main(dir_fortran_files, 100, dir_result)
-        self.assert_all_out_files(dir_true, dir_result)
-
+        self.run_and_test(testname_dir)
 
     def test_ignore_routine_in_string(self):
         testname_dir = 'test_ignore_routine_in_string'
-        dir_fortran_files, dir_true, dir_result = self.get_directories_string(testname_dir)
-        fmu.main(dir_fortran_files, 100, dir_result)
-        self.assert_all_out_files(dir_true, dir_result)
-
+        self.run_and_test(testname_dir)
 
     def test_uses_modules(self):
         testname_dir = 'test_uses_modules'
-        dir_fortran_files, dir_true, dir_result = self.get_directories_string(testname_dir)
-        fmu.main(dir_fortran_files, 100, dir_result)
-        self.assert_all_out_files(dir_true, dir_result)
+        self.run_and_test(testname_dir)
 
 
     def test_uses_interfaces(self):
         testname_dir = 'test_uses_interfaces'
-        dir_fortran_files, dir_true, dir_result = self.get_directories_string(testname_dir)
-        fmu.main(dir_fortran_files, 100, dir_result)
-        self.assert_all_out_files(dir_true, dir_result)
+        self.run_and_test(testname_dir)
 
 
-    def test_uses_abstract_interfaces(self):
-        testname_dir = 'test_uses_abstract_interfaces'
-        dir_fortran_files, dir_true, dir_result = self.get_directories_string(testname_dir)
-        fmu.main(dir_fortran_files, 100, dir_result)
-        self.assert_all_out_files(dir_true, dir_result)
+    def test_includes(self):
+        testname_dir = 'test_includes_inc_files'
+        self.run_and_test(testname_dir)
+
+
+    def test_abstract_interfaces_types_pointers(self):
+        testname_dir = 'test_abstract_interfaces_types_pointers'
+        self.run_and_test(testname_dir)
+
 
 
     # util functions
     #
+    def run_and_test(self, testname_dir):
+        dir_fortran_files, dir_true, dir_result = self.get_directories_string(testname_dir)
+        fmu.main(dir_fortran_files, 100, dir_result)
+        self.assert_all_out_files(dir_true, dir_result)
+
 
     def get_directories_string(self, testname_dir):
         dir_fortran_files = f'test/data/{testname_dir}/fortran_files'
@@ -61,4 +64,5 @@ class FortranMakeUtilsTests(TestCase):
             self.assertTrue(os.path.exists(result_file_path))
             with open(true_file_path, 'r', encoding="utf-8") as true_file:
                 with open(result_file_path, 'r', encoding="utf-8") as result_file:
+                    print(f'Files differ: {true_file_path} - {result_file_path}')
                     self.assertEqual(true_file.read(), result_file.read())
