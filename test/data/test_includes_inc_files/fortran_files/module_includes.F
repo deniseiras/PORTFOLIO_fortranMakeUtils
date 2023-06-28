@@ -1,9 +1,9 @@
 module includes 
+    
+    contains
 
 #include "includes.inc"
-
-contains
-
+    
     subroutine SUB1(X)
         integer, intent(IN)::X
         print *, "SUB1 = ", X
