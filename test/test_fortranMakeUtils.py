@@ -31,11 +31,17 @@ class FortranMakeUtilsTests(TestCase):
 
 
     def test_includes(self):
+        # TODO 
+        # - not implemented feature
+        # - check if include files must be at objects.mk and depend.mk
         testname_dir = 'test_includes_inc_files'
         self.run_and_test(testname_dir)
 
 
     def test_abstract_interfaces_types_pointers(self):
+        # TODO 
+        # - code feature
+        # - insert true files
         testname_dir = 'test_abstract_interfaces_types_pointers'
         self.run_and_test(testname_dir)
 
