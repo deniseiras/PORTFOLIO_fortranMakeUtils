@@ -1,4 +1,4 @@
-test/data/test_includes_inc_files/fortran_files/module_includes.F	subroutine	sub1
+test/data/test_includes_inc_files/fortran_files/includes/includes.inc	subroutine	sub_included
 	test/data/test_includes_inc_files/fortran_files/module_includes.F	subroutine	main_includes
-test/data/test_includes_inc_files/fortran_files/module_includes.F	subroutine	sub_included
+test/data/test_includes_inc_files/fortran_files/module_includes.F	subroutine	sub1
 	test/data/test_includes_inc_files/fortran_files/module_includes.F	subroutine	main_includes

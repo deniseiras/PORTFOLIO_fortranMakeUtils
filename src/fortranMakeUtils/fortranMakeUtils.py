@@ -38,7 +38,7 @@
 #
 # BUG:
 # * B1: stackoverflow when a program.f90 call a methods - must fix when using programs
-# * B2: allMethodsNotCalled.txt does not regards the father calller. calleTree.txt and callerTree.txt regards.
+# * B2: allMethodsNotCalled.txt does not regards the father caller. calleTree.txt and callerTree.txt regards.
 #
 # FIXED:
 #
@@ -143,6 +143,7 @@ def main(initial_dir, max_level, out_dir, filename_search=None, routine_search=N
                 strings = line.split()
                 
                 if len(strings) > 0:
+                    # subroutine or functions
                     if len(strings) > 1 and isRoutine(strings[0]):
                         method = strings[1].split("(")[0]
                         mod = Module(filename, None)

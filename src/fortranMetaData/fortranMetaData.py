@@ -87,7 +87,7 @@ def getFiles(initialDir):
     files = []
     for root, dirs, filez in os.walk(initialDir):
         for filename in filez:
-            if filename.endswith('.f90') or filename.endswith('.F90') or filename.endswith('.F'):
+            if filename.endswith('.f90') or filename.endswith('.F90') or filename.endswith('.F') or filename.endswith('.inc'):
                 files.append(root + "/" + filename)
     return files
 
@@ -272,10 +272,12 @@ def writeObjectsFile(modules, out_dir):
     fileObjs = open(fileObjsName, 'w')
     fileObjs.write("SRCS =")
     for eachModule in modules:
-        fileObjs.write(" " + eachModule.getOnlyFileName())
+        if not eachModule.getOnlyFileName().endswith(".inc"):
+            fileObjs.write(" " + eachModule.getOnlyFileName())
     fileObjs.write("\n\nOBJS =")
     for eachModule in modules:
-        fileObjs.write(" " + eachModule.getObjectName())
+        if not eachModule.getOnlyFileName().endswith(".inc"):
+            fileObjs.write(" " + eachModule.getObjectName())
     fileObjs.close()
 
 
